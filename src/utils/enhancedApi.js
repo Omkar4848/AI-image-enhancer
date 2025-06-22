@@ -4,6 +4,8 @@ const KEY = "wxrpq43xeg2gl8y11";
 
 const BASE_URL = "https://techhk.aoscdn.com/";
 
+const Max_RETRIES = 20;
+
 export const enhancedImageAPI = async (file) => {
   try {
     const taskId = await uploadImage(file);
@@ -61,9 +63,9 @@ const pollForEnhancedImage = async (taskId, retries = 0) => {
   const result = await fetchEnhancedImage(taskId);
 
   if (result.state === 4) {
-    console.log("Processing....");
+    console.log(`Processing....(${retries}/${Max_RETRIES})`);
 
-    if (retries >= 20) {
+    if (retries >= Max_RETRIES) {
       throw new Error("Maximum retries reached. Please try agaain later.");
     }
 
